@@ -3,7 +3,13 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - CinemachineTarget
+  - Meteor
+  - RedSaber
+  - BlueSaber
+  - RedFruit
+  - BlueFruit
   layers:
   - Default
   - TransparentFX
