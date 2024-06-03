@@ -79,7 +79,7 @@ public class GameManager : MonoBehaviour
     {
         while (true)
         {
-            yield return new WaitForSeconds(1);
+            yield return new WaitForSeconds(Random.Range(0.5f, 1.5f)); // Random spawn interval between 0.5 and 1.5 seconds
 
             if (fruitPrefabs.Length == 0)
             {
@@ -121,12 +121,15 @@ public class GameManager : MonoBehaviour
                 fruitRb.isKinematic = false;
 
                 // Apply an upward force to launch the fruit
-                float upwardForce = Random.Range(5f, 10f); // Adjust the range as needed
+                float upwardForce = Random.Range(7f, 12f); // Adjust the range as needed
                 fruitRb.AddForce(Vector3.up * upwardForce, ForceMode.Impulse);
 
                 // Apply a random horizontal force to create a curve
-                float horizontalForce = Random.Range(-2f, 2f); // Adjust the range as needed
+                float horizontalForce = Random.Range(-5f, 5f); // Adjust the range as needed
                 fruitRb.AddForce(Vector3.right * horizontalForce, ForceMode.Impulse);
+
+                // Destroy the fruit after 3 seconds
+                Destroy(fruit, 3f);
             }
             else
             {
@@ -134,5 +137,6 @@ public class GameManager : MonoBehaviour
             }
         }
     }
+
 
 }
