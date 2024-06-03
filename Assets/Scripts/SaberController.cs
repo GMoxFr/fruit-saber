@@ -4,26 +4,36 @@ using UnityEngine;
 
 public class SaberController : MonoBehaviour
 {
-    public Transform vrControllerTransform; // Assign the VR controller transform in the inspector
+	public Transform handTransform; // Assign the hand transform in the Inspector
 
-    private Rigidbody rb;
+	private Rigidbody rb;
+	private Vector3 previousPosition;
+	private Vector3 saberVelocity;
 
-    void Start()
-    {
-        rb = GetComponent<Rigidbody>();
-        if (rb == null)
-        {
-            Debug.LogError("No Rigidbody found on the saber.");
-        }
-    }
+	void Start()
+	{
+		rb = GetComponent<Rigidbody>();
+		if (rb == null)
+		{
+			Debug.LogError("No Rigidbody found on the saber.");
+			return;
+		}
 
-    void FixedUpdate()
-    {
-        if (vrControllerTransform != null)
-        {
-            // Update the Rigidbody's position and rotation to match the VR controller
-            rb.MovePosition(vrControllerTransform.position);
-            rb.MoveRotation(vrControllerTransform.rotation);
-        }
-    }
+		previousPosition = handTransform.position;
+	}
+
+	void FixedUpdate()
+	{
+		if (handTransform != null)
+		{
+			// Manually calculate the velocity
+			saberVelocity = (handTransform.position - previousPosition) / Time.fixedDeltaTime;
+			previousPosition = handTransform.position;
+		}
+	}
+
+	public Vector3 GetSaberVelocity()
+	{
+		return saberVelocity;
+	}
 }
