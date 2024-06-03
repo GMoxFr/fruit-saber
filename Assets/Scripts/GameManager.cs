@@ -90,12 +90,12 @@ public class GameManager : MonoBehaviour
             // Randomly select a fruit prefab
             GameObject fruitPrefab = fruitPrefabs[Random.Range(0, fruitPrefabs.Length)];
 
-            // Calculate a random position within the BoxCollider bounds
-            Vector3 spawnPosition = new Vector3(
-                Random.Range(gameZoneCollider.bounds.min.x, gameZoneCollider.bounds.max.x),
-                Random.Range(gameZoneCollider.bounds.min.y, gameZoneCollider.bounds.max.y),
-                Random.Range(gameZoneCollider.bounds.min.z, gameZoneCollider.bounds.max.z)
-            );
+            // Calculate a random horizontal position within the BoxCollider bounds
+            float spawnX = Random.Range(gameZoneCollider.bounds.min.x, gameZoneCollider.bounds.max.x);
+            float spawnY = gameZoneCollider.bounds.min.y; // Start at the bottom of the game zone
+            float spawnZ = Random.Range(gameZoneCollider.bounds.min.z, gameZoneCollider.bounds.max.z);
+
+            Vector3 spawnPosition = new Vector3(spawnX, spawnY, spawnZ);
 
             GameObject fruit = Instantiate(fruitPrefab, spawnPosition, Quaternion.identity);
 
@@ -117,8 +117,16 @@ public class GameManager : MonoBehaviour
 
                 // Add Rigidbody to the fruit
                 Rigidbody fruitRb = fruit.AddComponent<Rigidbody>();
-                fruitRb.useGravity = false; // or false, depending on your game logic
+                fruitRb.useGravity = true; // Enable gravity
                 fruitRb.isKinematic = false;
+
+                // Apply an upward force to launch the fruit
+                float upwardForce = Random.Range(5f, 10f); // Adjust the range as needed
+                fruitRb.AddForce(Vector3.up * upwardForce, ForceMode.Impulse);
+
+                // Apply a random horizontal force to create a curve
+                float horizontalForce = Random.Range(-2f, 2f); // Adjust the range as needed
+                fruitRb.AddForce(Vector3.right * horizontalForce, ForceMode.Impulse);
             }
             else
             {
@@ -126,4 +134,5 @@ public class GameManager : MonoBehaviour
             }
         }
     }
+
 }
