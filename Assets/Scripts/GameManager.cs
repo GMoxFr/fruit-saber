@@ -90,12 +90,14 @@ public class GameManager : MonoBehaviour
             // Randomly select a fruit prefab
             GameObject fruitPrefab = fruitPrefabs[Random.Range(0, fruitPrefabs.Length)];
 
-            // Calculate spawn position at the bottom left or bottom right of the game zone
-            float spawnX = Random.value > 0.5f ? gameZoneCollider.bounds.min.x : gameZoneCollider.bounds.max.x;
-            float spawnY = gameZoneCollider.bounds.min.y - 1f; // Start slightly below the bottom of the game zone
-            float spawnZ = Random.Range(gameZoneCollider.bounds.min.z, gameZoneCollider.bounds.max.z);
+            // Calculate spawn position relative to the camera's view
+            Vector3 screenPosition = new Vector3(
+                Random.value > 0.5f ? Screen.width * 0.1f : Screen.width * 0.9f, // 10% from left or 90% from left
+                Screen.height * 0.05f, // 5% from bottom
+                Camera.main.nearClipPlane + 1f // Slightly in front of the near clip plane
+            );
 
-            Vector3 spawnPosition = new Vector3(spawnX, spawnY, spawnZ);
+            Vector3 spawnPosition = Camera.main.ScreenToWorldPoint(screenPosition);
 
             GameObject fruit = Instantiate(fruitPrefab, spawnPosition, Quaternion.identity);
 
@@ -125,7 +127,7 @@ public class GameManager : MonoBehaviour
                 fruitRb.AddForce(Vector3.up * upwardForce, ForceMode.Impulse);
 
                 // Apply a random horizontal force to create a curve
-                float horizontalForce = spawnX == gameZoneCollider.bounds.min.x ? Random.Range(2f, 5f) : Random.Range(-5f, -2f); // Adjusted horizontal force
+                float horizontalForce = spawnPosition.x < Camera.main.transform.position.x ? Random.Range(2f, 5f) : Random.Range(-5f, -2f); // Adjusted horizontal force
                 fruitRb.AddForce(Vector3.right * horizontalForce, ForceMode.Impulse);
 
                 // Destroy the fruit after 5 seconds
@@ -137,6 +139,7 @@ public class GameManager : MonoBehaviour
             }
         }
     }
+
 
 
 
