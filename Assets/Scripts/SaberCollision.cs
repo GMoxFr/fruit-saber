@@ -14,32 +14,30 @@ public class SaberCollision : MonoBehaviour
 		{
 			// Get the point of impact and the direction of the saber's movement
 			Vector3 collisionPoint = collision.contacts[0].point;
-			Vector3 collisionNormal = collision.contacts[0].normal;
-			// Vector3 saberVelocity = GetComponent<Rigidbody>().velocity;
-			Vector3 saberVelocity = GetComponent<SaberController>().GetSaberVelocity();
+			Vector3 saberVelocity = GetComponent<SaberController>().GetAverageVelocity();
 
-			Debug.Log("Collision point: " + collisionPoint);
-			Debug.Log("Collision normal: " + collisionNormal);
-			Debug.Log("Saber velocity: " + saberVelocity);
+			Vector3 epsilonVector = new Vector3(0.0001f, 0.0001f, 0.0001f);
+
+			if (saberVelocity.magnitude < epsilonVector.magnitude)
+			{
+				saberVelocity = transform.forward;
+			}
 
 			// Calculate the slice plane
 			EzySlice.Plane slicePlane = CalculateSlicePlane(collisionPoint, saberVelocity);
 
 			// Slice the fruit
 			SliceFruit(collision.gameObject, slicePlane);
-			// Destroy(collision.gameObject);
 		}
 	}
 
 	EzySlice.Plane CalculateSlicePlane(Vector3 collisionPoint, Vector3 saberVelocity)
 	{
 		// Define the slice direction based on the saber's movement direction
-		// Vector3 sliceDirection = Vector3.Cross(saberVelocity, Vector3.up).normalized;
 		Vector3 slicePlaneNormal = Vector3.Cross(saberVelocity, Vector3.forward).normalized;
 
 		// Create the slicing plane
 		return new EzySlice.Plane(collisionPoint, slicePlaneNormal);
-		// return new EzySlice.Plane(collisionPoint, Vector3.up);
 	}
 
 	void SliceFruit(GameObject fruit, EzySlice.Plane slicePlane)

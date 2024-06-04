@@ -7,8 +7,9 @@ public class SaberController : MonoBehaviour
 	public Transform handTransform; // Assign the hand transform in the Inspector
 
 	private Rigidbody rb;
-	private Vector3 previousPosition;
-	private Vector3 saberVelocity;
+	private Vector3[] previousPositions;
+	private int positionIndex;
+	private int positionCount;
 
 	void Start()
 	{
@@ -19,21 +20,41 @@ public class SaberController : MonoBehaviour
 			return;
 		}
 
-		previousPosition = handTransform.position;
+		// Initialize the previous positions array
+		previousPositions = new Vector3[3]; // Tracking the last 3 positions
+		positionIndex = 0;
+		positionCount = 0;
 	}
 
 	void FixedUpdate()
 	{
 		if (handTransform != null)
 		{
-			// Manually calculate the velocity
-			saberVelocity = (handTransform.position - previousPosition) / Time.fixedDeltaTime;
-			previousPosition = handTransform.position;
+			// Update the previous positions array
+			previousPositions[positionIndex] = handTransform.position;
+			positionIndex = (positionIndex + 1) % previousPositions.Length;
+			if (positionCount < previousPositions.Length)
+			{
+				positionCount++;
+			}
 		}
 	}
 
-	public Vector3 GetSaberVelocity()
+	public Vector3 GetAverageVelocity()
 	{
-		return saberVelocity;
+		if (positionCount < 2)
+		{
+			return Vector3.zero;
+		}
+
+		Vector3 totalDisplacement = Vector3.zero;
+		for (int i = 0; i < positionCount - 1; i++)
+		{
+			int currentIndex = (positionIndex + i) % previousPositions.Length;
+			int nextIndex = (currentIndex + 1) % previousPositions.Length;
+			totalDisplacement += previousPositions[nextIndex] - previousPositions[currentIndex];
+		}
+
+		return totalDisplacement / ((positionCount - 1) * Time.fixedDeltaTime);
 	}
 }
