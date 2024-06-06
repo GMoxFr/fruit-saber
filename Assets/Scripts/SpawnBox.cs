@@ -41,7 +41,7 @@ public class SpawnBox : MonoBehaviour
 
 			// Instantiate the fruit prefab
 			GameObject fruit = Instantiate(fruitPrefab, spawnPosition, spawnRotation);
-			// AudioManager.instance.PlayFruitSpawn(fruit);
+			AudioManager.instance.PlayFruitSpawn(fruit);
 
 			// Assign a random color to the fruit
 			if (Random.value < 0.5f)
