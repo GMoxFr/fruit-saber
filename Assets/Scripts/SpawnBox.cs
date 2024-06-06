@@ -61,7 +61,7 @@ public class SpawnBox : MonoBehaviour
 			rb.isKinematic = false;
 			rb.mass = 0.1f;
 
-			float upwardForce = Random.Range(0.35f, 0.5f);
+			float upwardForce = Random.Range(0.30f, 0.45f);
 			rb.AddForce(Vector3.up * upwardForce, ForceMode.Impulse);
 
 			float horizontalForceMagnitude = 0.1f; // Default horizontal force magnitude
@@ -71,14 +71,26 @@ public class SpawnBox : MonoBehaviour
 			// Increase the horizontal force based on the distance from the center
 			horizontalForceMagnitude += (distanceFromCenter / boxHalfWidth) * Random.Range(0.05f, 0.15f);
 
+			Vector3 horizontalForceDirection;
+			Vector3 torqueDirection;
+
 			if (spawnPosition.x > transform.position.x) // Spawned on the right side
 			{
-				rb.AddForce(Vector3.left * horizontalForceMagnitude, ForceMode.Impulse);
+				horizontalForceDirection = Vector3.left;
+				torqueDirection = Vector3.forward; // Rotate around the Z-axis
 			}
 			else // Spawned on the left side
 			{
-				rb.AddForce(Vector3.right * horizontalForceMagnitude, ForceMode.Impulse);
+				horizontalForceDirection = Vector3.right;
+				torqueDirection = Vector3.back; // Rotate around the Z-axis
 			}
+
+			// Apply horizontal force
+			rb.AddForce(horizontalForceDirection * horizontalForceMagnitude, ForceMode.Impulse);
+
+			// Apply torque to make the fruit spin
+			float torqueMagnitude = Random.Range(0.0001f, 0.001f);
+			rb.AddTorque(torqueDirection * torqueMagnitude, ForceMode.Impulse);
 
 			// Safeguard to make sure the fruit is destroyed if it falls out of bounds
 			Destroy(fruit, 20.0f);
