@@ -50,7 +50,7 @@ public class SaberCollision : MonoBehaviour
 
 		void SliceFruit(GameObject fruit, EzySlice.Plane slicePlane)
 		{
-			// AudioManager.instance.PlayFruitSlash(fruit);
+			AudioManager.instance.PlayFruitSlash(fruit);
 			// Perform the slice using EzySlice
 			SlicedHull slicedHull = fruit.Slice(slicePlane, fruit.GetComponent<Renderer>().material);
 
