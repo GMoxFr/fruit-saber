@@ -267,6 +267,7 @@ GameObject:
   m_Component:
   - component: {fileID: 263451621}
   - component: {fileID: 263451620}
+  - component: {fileID: 263451622}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -305,6 +306,21 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &263451622
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 263451619}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 489b186b4f666dc47855792fbbb545fb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fruitSlash: {fileID: 8300000, guid: 56f1a4270e5c2e241b578268041fba42, type: 3}
+  fruitSpawn: {fileID: 8300000, guid: 56f1a4270e5c2e241b578268041fba42, type: 3}
+  music: {fileID: 8300000, guid: 2455901a8b6af424790839fa8465a6af, type: 3}
 --- !u!1 &304230039
 GameObject:
   m_ObjectHideFlags: 0
