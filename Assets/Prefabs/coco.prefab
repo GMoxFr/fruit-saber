@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 6940988781340848773}
   - component: {fileID: 2078483441523612876}
   m_Layer: 0
-  m_Name: apple
+  m_Name: coco
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -41,7 +41,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2905567773809332963}
-  m_Mesh: {fileID: -120649301937841329, guid: 1e5a3974adf6f354d808987e3a7a0a95, type: 3}
+  m_Mesh: {fileID: 5269023068852365980, guid: fe94c1350ffd01841b0423e27beb2620, type: 3}
 --- !u!23 &6940988781340848773
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -62,7 +62,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 6689227800586764425, guid: 1e5a3974adf6f354d808987e3a7a0a95, type: 3}
+  - {fileID: 1479300982240495463, guid: fe94c1350ffd01841b0423e27beb2620, type: 3}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -105,4 +105,4 @@ MeshCollider:
   serializedVersion: 5
   m_Convex: 1
   m_CookingOptions: 30
-  m_Mesh: {fileID: -120649301937841329, guid: 1e5a3974adf6f354d808987e3a7a0a95, type: 3}
+  m_Mesh: {fileID: 5269023068852365980, guid: fe94c1350ffd01841b0423e27beb2620, type: 3}

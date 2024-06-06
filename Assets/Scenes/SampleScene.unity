@@ -381,7 +381,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 304230039}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -2315,7 +2315,7 @@ Transform:
   m_GameObject: {fileID: 2028716219}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -1.5, z: 1.5}
+  m_LocalPosition: {x: 0, y: -1, z: 1.25}
   m_LocalScale: {x: 4, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2334,7 +2334,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fruitPrefabs:
-  - {fileID: 7039508593298990799, guid: e09f9f78276d49d4d84dae969ff4d249, type: 3}
+  - {fileID: 2905567773809332963, guid: 94c50d15edf53b2438ce9a064447d36c, type: 3}
+  - {fileID: 2905567773809332963, guid: b189b127140803b4680b21249ee5ad4e, type: 3}
+  - {fileID: 2905567773809332963, guid: 23333097c8d7a0e43b57e12a291158a1, type: 3}
+  - {fileID: 2905567773809332963, guid: 6b888878f06b3904c9936a1be0a52541, type: 3}
+  - {fileID: 2905567773809332963, guid: f9c28797c9bd3fe4ea2bf69ba44fc2fc, type: 3}
+  - {fileID: 2905567773809332963, guid: c1afd4ae44b77574c854386342e41ecf, type: 3}
   blueSaberMaterial: {fileID: 2100000, guid: 207db96fc1a7f994e865ad2a6749146a, type: 2}
   redSaberMaterial: {fileID: 2100000, guid: 5b22bce1ec2756b4eb4541185b6b57f7, type: 2}
 --- !u!1660057539 &9223372036854775807
