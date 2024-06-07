@@ -121,13 +121,13 @@ public class SaberCollision : MonoBehaviour
 			GameObject upperHull = slicedHull.CreateUpperHull(fruit, fruit.GetComponent<Renderer>().material);
 			GameObject lowerHull = slicedHull.CreateLowerHull(fruit, fruit.GetComponent<Renderer>().material);
 
-			// Remove mesh collider for the sliced halves
-			Destroy(upperHull.GetComponent<MeshCollider>());
-			Destroy(lowerHull.GetComponent<MeshCollider>());
-
 			// Add necessary components to the sliced halves
 			AddComponentsToSlicedHull(upperHull, slicePlane.normal);
 			AddComponentsToSlicedHull(lowerHull, -slicePlane.normal);
+
+			// Deactivate the MeshCollider components
+			upperHull.GetComponent<MeshCollider>().enabled = false;
+			lowerHull.GetComponent<MeshCollider>().enabled = false;
 
 			// Disable and destroy the original fruit after a short delay
 			fruit.GetComponent<Collider>().enabled = false;
@@ -151,11 +151,11 @@ public class SaberCollision : MonoBehaviour
 				GameObject upperHull = genericSlicedHull.CreateUpperHull(fruit, fruit.GetComponent<Renderer>().material);
 				GameObject lowerHull = genericSlicedHull.CreateLowerHull(fruit, fruit.GetComponent<Renderer>().material);
 
-				Destroy(upperHull.GetComponent<MeshCollider>());
-				Destroy(lowerHull.GetComponent<MeshCollider>());
-
 				AddComponentsToSlicedHull(upperHull, genericPlane.normal);
 				AddComponentsToSlicedHull(lowerHull, -genericPlane.normal);
+
+				upperHull.GetComponent<MeshCollider>().enabled = false;
+				lowerHull.GetComponent<MeshCollider>().enabled = false;
 
 				fruit.GetComponent<Collider>().enabled = false;
 				fruit.GetComponent<Renderer>().enabled = false;
