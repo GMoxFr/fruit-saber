@@ -10,6 +10,11 @@ TagManager:
   - BlueSaber
   - RedFruit
   - BlueFruit
+  - TrackingObject
+  - BlueController
+  - RedController
+  - ScoreText
+  - TimerText
   layers:
   - Default
   - TransparentFX

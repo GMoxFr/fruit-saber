@@ -25,7 +25,39 @@ public class SpawnBox : MonoBehaviour
 	{
 		while (GameManager.instance.GetTimeRemaining() > 0.0f)
 		{
-			yield return new WaitForSeconds(Random.Range(0.5f, 1.5f)); // Random spawn interval between 0.5 and 1.5 seconds
+			float waitTime = 0.0f;
+			// Change spawn rate based on difficulty and time remaining (goes faster as time runs out) 
+			switch (GameManager.instance.GetDifficulty())
+			{
+				case Difficulty.Easy:
+					waitTime = Random.Range(1.0f, 2.0f);
+					break;
+				case Difficulty.Normal:
+					waitTime = Random.Range(0.5f, 1.5f);
+					break;
+				case Difficulty.Hard:
+					waitTime = Random.Range(0.25f, 0.75f);
+					break;
+			}
+
+			if (GameManager.instance.GetDifficulty() != Difficulty.Easy)
+			{
+				float time = GameManager.instance.GetTimeRemaining();
+				if (time > GameManager.instance.setTimer * 0.8f)
+				{
+					// Do nothing
+				}
+				else if (time > GameManager.instance.setTimer * 0.5f)
+				{
+					waitTime *= 0.75f;
+				}
+				else if (time > GameManager.instance.setTimer * 0.2f)
+				{
+					waitTime *= 0.5f;
+				}
+			}
+
+			yield return new WaitForSeconds(waitTime);
 
 			// Randomly select a fruit prefab
 			GameObject fruitPrefab = fruitPrefabs[Random.Range(0, fruitPrefabs.Length)];
