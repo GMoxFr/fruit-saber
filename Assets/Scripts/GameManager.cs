@@ -49,8 +49,6 @@ public class GameManager : MonoBehaviour
 	// Start is called before the first frame update
 	void Start()
 	{
-		// Wait for 5s before starting the game
-		// Invoke("StartGame", 5.0f);
 		StartGame();
 	}
 
@@ -67,7 +65,7 @@ public class GameManager : MonoBehaviour
 			timerText.GetComponent<TMPro.TextMeshProUGUI>().text = "Time left: " + timeRemaining.ToString("F1") + "s";
 		}
 
-		if (timeRemaining > 0)
+		if (timeRemaining > 0 && gameState == GameState.Playing)
 		{
 			timeRemaining -= Time.deltaTime;
 		}
@@ -91,8 +89,7 @@ public class GameManager : MonoBehaviour
 	public void StartGame(Difficulty difficulty = Difficulty.Normal)
 	{
 		gameState = GameState.Playing;
-		// if (SceneManager.GetActiveScene().name != "Game")
-		// 	SceneManager.LoadScene("Game");
+		this.difficulty = difficulty;
 
 		// Reset the score and timer
 		score = 0;
@@ -101,6 +98,11 @@ public class GameManager : MonoBehaviour
 		// Find the score and timer text objects
 		scoreText = GameObject.FindGameObjectWithTag("ScoreText");
 		timerText = GameObject.FindGameObjectWithTag("TimerText");
+	}
+
+	public void EndGame()
+	{
+		gameState = GameState.GameOver;
 	}
 
 	public Difficulty GetDifficulty()

@@ -23,7 +23,7 @@ public class SpawnBox : MonoBehaviour
 
 	IEnumerator SpawnFruits()
 	{
-		while (GameManager.instance.GetTimeRemaining() > 0.0f)
+		while (GameManager.instance.GetTimeRemaining() > 0.0f && GameManager.instance.gameState == GameState.Playing)
 		{
 			float waitTime = 0.0f;
 			// Change spawn rate based on difficulty and time remaining (goes faster as time runs out) 
@@ -43,18 +43,10 @@ public class SpawnBox : MonoBehaviour
 			if (GameManager.instance.GetDifficulty() != Difficulty.Easy)
 			{
 				float time = GameManager.instance.GetTimeRemaining();
-				if (time > GameManager.instance.setTimer * 0.8f)
-				{
-					// Do nothing
-				}
-				else if (time > GameManager.instance.setTimer * 0.5f)
-				{
+				if (time < GameManager.instance.setTimer * 0.8f && time > GameManager.instance.setTimer * 0.5f)
 					waitTime *= 0.75f;
-				}
 				else if (time > GameManager.instance.setTimer * 0.2f)
-				{
 					waitTime *= 0.5f;
-				}
 			}
 
 			yield return new WaitForSeconds(waitTime);

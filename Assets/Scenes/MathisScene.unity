@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.0014886619, g: 0.0013932232, b: 0.0013238029, a: 1}
+  m_IndirectSpecularColor: {r: 0.0014785795, g: 0.0013591028, b: 0.0012890887, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -618,11 +618,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4643521465287934, guid: 300f80108a63f48618cb4a1c8b8c1e86, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 1
+      value: 0.9775398
       objectReference: {fileID: 0}
     - target: {fileID: 4643521465287934, guid: 300f80108a63f48618cb4a1c8b8c1e86, type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0
+      value: -0.2107511
       objectReference: {fileID: 0}
     - target: {fileID: 4643521465287934, guid: 300f80108a63f48618cb4a1c8b8c1e86, type: 3}
       propertyPath: m_LocalRotation.y
@@ -634,7 +634,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4643521465287934, guid: 300f80108a63f48618cb4a1c8b8c1e86, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
+      value: -24.333
       objectReference: {fileID: 0}
     - target: {fileID: 4643521465287934, guid: 300f80108a63f48618cb4a1c8b8c1e86, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
@@ -693,7 +693,7 @@ MonoBehaviour:
   timeRemaining: 0
   timerText: {fileID: 26095964}
   gameState: 0
-  difficulty: 2
+  difficulty: 1
 --- !u!4 &263451621
 Transform:
   m_ObjectHideFlags: 0
@@ -1101,7 +1101,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 0}
+    m_TransformParent: {fileID: 1614918243}
     m_Modifications:
     - target: {fileID: 3458631329422770788, guid: 00f2918771afc4e07b0a2018e54d57ec,
         type: 3}
@@ -1121,17 +1121,17 @@ PrefabInstance:
     - target: {fileID: 3458631329422770788, guid: 00f2918771afc4e07b0a2018e54d57ec,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 11.65
+      value: 11.596937
       objectReference: {fileID: 0}
     - target: {fileID: 3458631329422770788, guid: 00f2918771afc4e07b0a2018e54d57ec,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.65
+      value: 1.0042558
       objectReference: {fileID: 0}
     - target: {fileID: 3458631329422770788, guid: 00f2918771afc4e07b0a2018e54d57ec,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 20.26
+      value: 19.811884
       objectReference: {fileID: 0}
     - target: {fileID: 3458631329422770788, guid: 00f2918771afc4e07b0a2018e54d57ec,
         type: 3}
@@ -1575,6 +1575,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rotationSpeed: 1
+--- !u!4 &576181608 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3458631329422770788, guid: 00f2918771afc4e07b0a2018e54d57ec,
+    type: 3}
+  m_PrefabInstance: {fileID: 336158199}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &631544787
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4300,6 +4306,7 @@ Transform:
   - {fileID: 1546669523}
   - {fileID: 696127364}
   - {fileID: 1871457576}
+  - {fileID: 576181608}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1640864689
@@ -4594,7 +4601,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: 9c76af3dd934947e0a6c104077cb2ea0, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -6126,5 +6133,4 @@ SceneRoots:
   - {fileID: 1971726603}
   - {fileID: 1272196322}
   - {fileID: 1614918243}
-  - {fileID: 336158199}
   - {fileID: 753502129}

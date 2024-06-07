@@ -1,12 +1,12 @@
-using UnityEngine;
 using System.Collections;
+using UnityEngine;
 
 namespace EzySlice {
     /**
      * Define Extension methods for easy access to slicer functionality
      */
     public static class SlicerExtensions {
-        
+
         /**
          * SlicedHull Return functions and appropriate overrides!
          */
@@ -21,7 +21,11 @@ namespace EzySlice {
         public static SlicedHull Slice(this GameObject obj, Vector3 position, Vector3 direction, TextureRegion textureRegion, Material crossSectionMaterial = null) {
             Plane cuttingPlane = new Plane();
 
-            Vector3 refUp = obj.transform.InverseTransformDirection(direction);
+            Matrix4x4 mat = obj.transform.worldToLocalMatrix;
+            Matrix4x4 transpose = mat.transpose;
+            Matrix4x4 inv = transpose.inverse;
+
+            Vector3 refUp = inv.MultiplyVector(direction).normalized;
             Vector3 refPt = obj.transform.InverseTransformPoint(position);
 
             cuttingPlane.Compute(refPt, refUp);
@@ -51,7 +55,11 @@ namespace EzySlice {
         public static GameObject[] SliceInstantiate(this GameObject obj, Vector3 position, Vector3 direction, TextureRegion cuttingRegion, Material crossSectionMaterial = null) {
             EzySlice.Plane cuttingPlane = new EzySlice.Plane();
 
-            Vector3 refUp = obj.transform.InverseTransformDirection(direction);
+            Matrix4x4 mat = obj.transform.worldToLocalMatrix;
+            Matrix4x4 transpose = mat.transpose;
+            Matrix4x4 inv = transpose.inverse;
+
+            Vector3 refUp = inv.MultiplyVector(direction).normalized;
             Vector3 refPt = obj.transform.InverseTransformPoint(position);
 
             cuttingPlane.Compute(refPt, refUp);
