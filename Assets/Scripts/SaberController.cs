@@ -1,6 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.XR;
+using UnityEngine.XR.Interaction.Toolkit;
 
 public class SaberController : MonoBehaviour
 {
@@ -10,6 +13,34 @@ public class SaberController : MonoBehaviour
 	private Vector3[] previousPositions;
 	private int positionIndex;
 	private int positionCount;
+
+	// private XRBaseController ownController;
+	// private XRIDefaultInputActions inputActions;
+	// private InputAction triggerAction;
+
+	// void Awake()
+	// {
+	// 	inputActions = new XRIDefaultInputActions();
+	// }
+
+	// void OnEnable()
+	// {
+	// 	if (gameObject.CompareTag("RedSaber"))
+	// 	{
+	// 		inputActions.XRIRightHandInteraction.Activate.Enable();
+	// 	}
+	// 	else if (gameObject.CompareTag("LeftSaber"))
+	// 	{
+	// 		inputActions.XRILeftHandInteraction.Activate.Enable();
+	// 	}
+
+	// 	triggerAction.Enable();
+	// }
+
+	// void OnDisable()
+	// {
+	// 	triggerAction.Disable();
+	// }
 
 	void Start()
 	{
@@ -24,7 +55,41 @@ public class SaberController : MonoBehaviour
 		previousPositions = new Vector3[3]; // Tracking the last 3 positions
 		positionIndex = 0;
 		positionCount = 0;
+
+		// if (gameObject.CompareTag("BlueSaber"))
+		// {
+		// 	ownController = GameObject.FindGameObjectWithTag("BlueController").GetComponent<XRBaseController>();
+		// }
+		// else if (gameObject.CompareTag("RedSaber"))
+		// {
+		// 	ownController = GameObject.FindGameObjectWithTag("RedController").GetComponent<XRBaseController>();
+		// }
 	}
+
+	// void Update()
+	// {
+	// 	// Wait for input to start the game
+	// 	if (GameManager.instance.gameState == GameState.WaitingForStart)
+	// 	{
+	// 		if (triggerAction.triggered)
+	// 		{
+	// 			GameManager.instance.StartGame();
+	// 		}
+	// 	}
+	// }
+
+	// private bool CheckTriggerButton(XRController controller)
+	// {
+	// 	if (controller.inputDevice.IsValid)
+	// 	{
+	// 		bool triggerButtonValue;
+	// 		if (controller.inputDevice.TryGetFeatureValue(CommonUsages.triggerButton, out triggerButtonValue))
+	// 		{
+	// 			return triggerButtonValue;
+	// 		}
+	// 	}
+	// 	return false;
+	// }
 
 	void FixedUpdate()
 	{

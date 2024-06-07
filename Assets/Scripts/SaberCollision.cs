@@ -2,136 +2,189 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using EzySlice;
+using UnityEngine.XR.Interaction.Toolkit;
 
 public class SaberCollision : MonoBehaviour
 {
-    void OnCollisionEnter(Collision collision)
-    {
-        Debug.Log("Collision detected between " + gameObject.name + " and " + collision.gameObject.name);
+	private XRBaseController ownController;
 
-        if ((gameObject.CompareTag("BlueSaber") && collision.gameObject.CompareTag("BlueFruit")) ||
-            (gameObject.CompareTag("RedSaber") && collision.gameObject.CompareTag("RedFruit")))
-        {
-            // Get the point of impact and the direction of the saber's movement
-            Vector3 collisionPoint = collision.contacts[0].point;
-            Vector3 saberVelocity = GetComponent<SaberController>().GetAverageVelocity();
+	private void Start()
+	{
+		if (gameObject.CompareTag("BlueSaber"))
+		{
+			ownController = GameObject.FindGameObjectWithTag("BlueController").GetComponent<XRBaseController>();
+		}
+		else if (gameObject.CompareTag("RedSaber"))
+		{
+			ownController = GameObject.FindGameObjectWithTag("RedController").GetComponent<XRBaseController>();
+		}
+	}
 
-            Vector3 epsilonVector = new Vector3(0.0001f, 0.0001f, 0.0001f);
+	void OnCollisionEnter(Collision collision)
+	{
+		Debug.Log("Collision detected between " + gameObject.name + " and " + collision.gameObject.name);
 
-            if (saberVelocity.magnitude < epsilonVector.magnitude)
-            {
-                saberVelocity = transform.forward;
-            }
+		if (collision.gameObject.CompareTag("BlueFruit") || collision.gameObject.CompareTag("RedFruit"))
+		{
+			// Get the point of impact and the direction of the saber's movement
+			Vector3 collisionPoint = collision.contacts[0].point;
+			Vector3 saberVelocity = GetComponent<SaberController>().GetAverageVelocity();
 
-            // Slice the fruit
-            SliceFruit(collision.gameObject, collisionPoint, saberVelocity);
+			Vector3 epsilonVector = new Vector3(0.0001f, 0.0001f, 0.0001f);
 
-            // Increment the score
-            GameManager.instance.IncrementScore();
-        }
-        else if ((gameObject.CompareTag("BlueSaber") && collision.gameObject.CompareTag("RedFruit")) ||
-                 (gameObject.CompareTag("RedSaber") && collision.gameObject.CompareTag("BlueFruit")))
-        {
-            // Decrement the score
-            GameManager.instance.DecrementScore(2);
-        }
-    }
+			if (saberVelocity.magnitude < epsilonVector.magnitude)
+			{
+				saberVelocity = transform.forward;
+			}
 
-    EzySlice.Plane CalculateSlicePlane(Vector3 collisionPoint, Vector3 saberVelocity, GameObject fruit)
-    {
-        // Define the slice direction based on the saber's movement direction
-        Vector3 slicePlaneNormal = Vector3.Cross(saberVelocity, Vector3.forward).normalized;
+			// Slice the fruit
+			SliceFruit(collision.gameObject, collisionPoint, saberVelocity);
 
-        // Create the initial slicing plane
-        EzySlice.Plane initialPlane = new EzySlice.Plane(collisionPoint, slicePlaneNormal);
+			// Increment the score
+			if ((collision.gameObject.CompareTag("BlueFruit") && gameObject.CompareTag("BlueSaber")) ||
+				(collision.gameObject.CompareTag("RedFruit") && gameObject.CompareTag("RedSaber")))
+			{
+				AudioManager.instance.PlayFruitSlash(collision.gameObject);
+				GameManager.instance.IncrementScore();
+			}
+			else
+			{
+				AudioManager.instance.PlayFruitFail(collision.gameObject);
+				GameManager.instance.DecrementScore(2);
+			}
 
-        // Check if the initial plane intersects the fruit
-        if (DoesPlaneIntersect(fruit, initialPlane))
-        {
-            return initialPlane;
-        }
-        else
-        {
-            // Create a placeholder plane that intersects the fruit
-            Vector3 placeholderNormal = Vector3.up; // Or any direction you know will intersect
-            return new EzySlice.Plane(collisionPoint, placeholderNormal);
-        }
-    }
+			// Haptic feedback
+			ownController.SendHapticImpulse(1.0f, 0.3f);
+		}
+	}
 
-    bool DoesPlaneIntersect(GameObject fruit, EzySlice.Plane plane)
-    {
-        Mesh mesh = fruit.GetComponent<MeshFilter>().mesh;
-        Bounds bounds = mesh.bounds;
+	EzySlice.Plane CalculateSlicePlane(Vector3 collisionPoint, Vector3 saberVelocity, GameObject fruit)
+	{
+		// Define the slice direction based on the saber's movement direction
+		Vector3 slicePlaneNormal = Vector3.Cross(saberVelocity, Vector3.forward).normalized;
 
-        Vector3[] vertices = {
-            bounds.min,
-            new Vector3(bounds.min.x, bounds.min.y, bounds.max.z),
-            new Vector3(bounds.min.x, bounds.max.y, bounds.min.z),
-            new Vector3(bounds.min.x, bounds.max.y, bounds.max.z),
-            new Vector3(bounds.max.x, bounds.min.y, bounds.min.z),
-            new Vector3(bounds.max.x, bounds.min.y, bounds.max.z),
-            new Vector3(bounds.max.x, bounds.max.y, bounds.min.z),
-            bounds.max
-        };
+		// Create the initial slicing plane
+		EzySlice.Plane initialPlane = new EzySlice.Plane(collisionPoint, slicePlaneNormal);
 
-        foreach (Vector3 vertex in vertices)
-        {
-            if (plane.SideOf(fruit.transform.TransformPoint(vertex)) == EzySlice.SideOfPlane.ON)
-            {
-                return true;
-            }
-        }
-        return false;
-    }
+		// Check if the initial plane intersects the fruit
+		if (DoesPlaneIntersect(fruit, initialPlane))
+		{
+			return initialPlane;
+		}
+		else
+		{
+			// Create a placeholder plane that intersects the fruit
+			Vector3 placeholderNormal = Vector3.up; // Or any direction you know will intersect
+			return new EzySlice.Plane(collisionPoint, placeholderNormal);
+		}
+	}
 
-    void SliceFruit(GameObject fruit, Vector3 collisionPoint, Vector3 saberVelocity)
-    {
-        EzySlice.Plane slicePlane = CalculateSlicePlane(collisionPoint, saberVelocity, fruit);
+	bool DoesPlaneIntersect(GameObject fruit, EzySlice.Plane plane)
+	{
+		Mesh mesh = fruit.GetComponent<MeshFilter>().mesh;
+		Bounds bounds = mesh.bounds;
 
-        AudioManager.instance.PlayFruitSlash(fruit);
+		Vector3[] vertices = {
+			bounds.min,
+			new Vector3(bounds.min.x, bounds.min.y, bounds.max.z),
+			new Vector3(bounds.min.x, bounds.max.y, bounds.min.z),
+			new Vector3(bounds.min.x, bounds.max.y, bounds.max.z),
+			new Vector3(bounds.max.x, bounds.min.y, bounds.min.z),
+			new Vector3(bounds.max.x, bounds.min.y, bounds.max.z),
+			new Vector3(bounds.max.x, bounds.max.y, bounds.min.z),
+			bounds.max
+		};
 
-        Debug.Log($"Slicing {fruit.name} with plane normal: {slicePlane.normal} and point: {collisionPoint}");
+		foreach (Vector3 vertex in vertices)
+		{
+			if (plane.SideOf(fruit.transform.TransformPoint(vertex)) == EzySlice.SideOfPlane.ON)
+			{
+				return true;
+			}
+		}
+		return false;
+	}
 
-        // Perform the slice using EzySlice
-        SlicedHull slicedHull = fruit.Slice(slicePlane, fruit.GetComponent<Renderer>().material);
+	void SliceFruit(GameObject fruit, Vector3 collisionPoint, Vector3 saberVelocity)
+	{
+		EzySlice.Plane slicePlane = CalculateSlicePlane(collisionPoint, saberVelocity, fruit);
 
-        if (slicedHull != null)
-        {
-            Debug.Log("Slicing successful. Creating upper and lower hulls.");
-            // Create sliced halves
-            GameObject upperHull = slicedHull.CreateUpperHull(fruit, fruit.GetComponent<Renderer>().material);
-            GameObject lowerHull = slicedHull.CreateLowerHull(fruit, fruit.GetComponent<Renderer>().material);
+		Debug.Log($"Slicing {fruit.name} with plane normal: {slicePlane.normal} and point: {collisionPoint}");
 
-            // Add necessary components to the sliced halves
-            AddComponentsToSlicedHull(upperHull, slicePlane.normal);
-            AddComponentsToSlicedHull(lowerHull, -slicePlane.normal);
+		// Perform the slice using EzySlice
+		SlicedHull slicedHull = fruit.Slice(slicePlane, fruit.GetComponent<Renderer>().material);
 
-            // Disable and destroy the original fruit after a short delay
-            fruit.GetComponent<Collider>().enabled = false;
-            fruit.GetComponent<Renderer>().enabled = false;
-            Destroy(fruit, 1f);
-        }
-        else
-        {
-            Debug.LogWarning("Slicing failed. SlicedHull is null.");
-            fruit.GetComponent<Collider>().enabled = false;
-            fruit.GetComponent<Renderer>().enabled = false;
-            Destroy(fruit, 1f);
-        }
-    }
+		if (slicedHull != null)
+		{
+			Debug.Log("Slicing successful. Creating upper and lower hulls.");
+			// Create sliced halves
+			GameObject upperHull = slicedHull.CreateUpperHull(fruit, fruit.GetComponent<Renderer>().material);
+			GameObject lowerHull = slicedHull.CreateLowerHull(fruit, fruit.GetComponent<Renderer>().material);
 
-    void AddComponentsToSlicedHull(GameObject hull, Vector3 sliceNormal)
-    {
-        if (hull == null)
-        {
-            Debug.LogError("Hull is null.");
-            return;
-        }
+			// Remove mesh collider for the sliced halves
+			Destroy(upperHull.GetComponent<MeshCollider>());
+			Destroy(lowerHull.GetComponent<MeshCollider>());
 
-        hull.AddComponent<MeshCollider>().convex = true;
-        Rigidbody rb = hull.AddComponent<Rigidbody>();
-        rb.useGravity = true;
-        rb.AddForce(sliceNormal * Random.Range(5.0f, 10.0f), ForceMode.Impulse);
-        Destroy(hull, 5f);
-    }
+			// Add necessary components to the sliced halves
+			AddComponentsToSlicedHull(upperHull, slicePlane.normal);
+			AddComponentsToSlicedHull(lowerHull, -slicePlane.normal);
+
+			// Disable and destroy the original fruit after a short delay
+			fruit.GetComponent<Collider>().enabled = false;
+			fruit.GetComponent<Renderer>().enabled = false;
+			Destroy(fruit, 1f);
+		}
+		else
+		{
+			Debug.LogWarning("Slicing failed. SlicedHull is null.");
+			// fruit.GetComponent<Collider>().enabled = false;
+			// fruit.GetComponent<Renderer>().enabled = false;
+			// Destroy(fruit, 1f);
+
+			// Give a second change with a generic plane (collision point is center of the fruit, normal is up)
+			EzySlice.Plane genericPlane = new EzySlice.Plane(fruit.transform.position, Vector3.up);
+			SlicedHull genericSlicedHull = fruit.Slice(genericPlane, fruit.GetComponent<Renderer>().material);
+
+			if (genericSlicedHull != null)
+			{
+				Debug.Log("Generic slicing successful. Creating upper and lower hulls.");
+				GameObject upperHull = genericSlicedHull.CreateUpperHull(fruit, fruit.GetComponent<Renderer>().material);
+				GameObject lowerHull = genericSlicedHull.CreateLowerHull(fruit, fruit.GetComponent<Renderer>().material);
+
+				Destroy(upperHull.GetComponent<MeshCollider>());
+				Destroy(lowerHull.GetComponent<MeshCollider>());
+
+				AddComponentsToSlicedHull(upperHull, genericPlane.normal);
+				AddComponentsToSlicedHull(lowerHull, -genericPlane.normal);
+
+				fruit.GetComponent<Collider>().enabled = false;
+				fruit.GetComponent<Renderer>().enabled = false;
+				Destroy(fruit, 1f);
+			}
+			else
+			{
+				Debug.LogError("Generic slicing failed. SlicedHull is null.");
+
+				// Destroy the fruit
+				fruit.GetComponent<Collider>().enabled = false;
+				fruit.GetComponent<Renderer>().enabled = false;
+				Destroy(fruit, 1f);
+			}
+		}
+	}
+
+	void AddComponentsToSlicedHull(GameObject hull, Vector3 sliceNormal)
+	{
+		if (hull == null)
+		{
+			Debug.LogError("Hull is null.");
+			return;
+		}
+
+		hull.AddComponent<MeshCollider>().convex = true;
+		Rigidbody rb = hull.AddComponent<Rigidbody>();
+		rb.useGravity = true;
+		rb.AddForce(sliceNormal * Random.Range(5.0f, 10.0f), ForceMode.Impulse);
+		Destroy(hull, 5f);
+	}
 }
