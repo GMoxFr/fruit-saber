@@ -28,14 +28,15 @@ public class SaberCollision : MonoBehaviour
 		{
 			// Get the point of impact and the direction of the saber's movement
 			Vector3 collisionPoint = collision.contacts[0].point;
-			Vector3 saberVelocity = GetComponent<SaberController>().GetAverageVelocity();
+			Vector3 saberVelocity = collision.relativeVelocity.normalized;
+			// Vector3 saberVelocity = GetComponent<SaberController>().GetAverageVelocity();
 
-			Vector3 epsilonVector = new Vector3(0.0001f, 0.0001f, 0.0001f);
+			// Vector3 epsilonVector = new Vector3(0.0001f, 0.0001f, 0.0001f);
 
-			if (saberVelocity.magnitude < epsilonVector.magnitude)
-			{
-				saberVelocity = transform.forward;
-			}
+			// if (saberVelocity.magnitude < epsilonVector.magnitude)
+			// {
+			// 	saberVelocity = transform.forward;
+			// }
 
 			// Slice the fruit
 			SliceFruit(collision.gameObject, collisionPoint, saberVelocity);
