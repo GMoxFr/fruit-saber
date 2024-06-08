@@ -56,6 +56,24 @@ public class SaberCollision : MonoBehaviour
 			// Haptic feedback
 			ownController.SendHapticImpulse(1.0f, 0.3f);
 		}
+
+		if (collision.gameObject.CompareTag("Easy") || collision.gameObject.CompareTag("Normal") || collision.gameObject.CompareTag("Hard"))
+		{
+			ownController.SendHapticImpulse(1.0f, 1.0f);
+
+			if (collision.gameObject.CompareTag("Easy"))
+			{
+				GameManager.instance.StartGame(Difficulty.Easy);
+			}
+			else if (collision.gameObject.CompareTag("Normal"))
+			{
+				GameManager.instance.StartGame(Difficulty.Normal);
+			}
+			else if (collision.gameObject.CompareTag("Hard"))
+			{
+				GameManager.instance.StartGame(Difficulty.Hard);
+			}
+		}
 	}
 
 	EzySlice.Plane CalculateSlicePlane(Vector3 collisionPoint, Vector3 saberVelocity, GameObject fruit)

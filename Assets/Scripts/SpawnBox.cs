@@ -21,7 +21,7 @@ public class SpawnBox : MonoBehaviour
 		}
 	}
 
-	IEnumerator SpawnFruits()
+	public IEnumerator SpawnFruits()
 	{
 		while (GameManager.instance.GetTimeRemaining() > 0.0f && GameManager.instance.gameState == GameState.Playing)
 		{

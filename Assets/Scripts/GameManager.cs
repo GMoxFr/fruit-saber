@@ -7,7 +7,6 @@ public enum GameState
 {
 	WaitingForStart,
 	Playing,
-	GameOver
 }
 
 public enum Difficulty
@@ -28,6 +27,8 @@ public class GameManager : MonoBehaviour
 	public float setTimer = 120.0f;
 	public float timeRemaining = 0.0f;
 	public GameObject timerText;
+	public GameObject[] difficultyPlanets;
+	public SpawnBox spawnBox;
 	// Variables (internal)
 	public GameState gameState = GameState.WaitingForStart;
 	public Difficulty difficulty = Difficulty.Normal;
@@ -49,7 +50,6 @@ public class GameManager : MonoBehaviour
 	// Start is called before the first frame update
 	void Start()
 	{
-		StartGame();
 	}
 
 	// Update is called once per frame
@@ -68,6 +68,11 @@ public class GameManager : MonoBehaviour
 		if (timeRemaining > 0 && gameState == GameState.Playing)
 		{
 			timeRemaining -= Time.deltaTime;
+		}
+
+		if (timeRemaining <= 0 && gameState == GameState.Playing)
+		{
+			EndGame();
 		}
 	}
 
@@ -91,6 +96,12 @@ public class GameManager : MonoBehaviour
 		gameState = GameState.Playing;
 		this.difficulty = difficulty;
 
+		// Hide the difficulty selection planets
+		foreach (GameObject planet in difficultyPlanets)
+		{
+			planet.SetActive(false);
+		}
+
 		// Reset the score and timer
 		score = 0;
 		timeRemaining = setTimer;
@@ -98,11 +109,17 @@ public class GameManager : MonoBehaviour
 		// Find the score and timer text objects
 		scoreText = GameObject.FindGameObjectWithTag("ScoreText");
 		timerText = GameObject.FindGameObjectWithTag("TimerText");
+
+		// Start the fruit spawning coroutine after a short delay (2 seconds)
+		StartCoroutine(StartFruitSpawning());
 	}
 
 	public void EndGame()
 	{
-		gameState = GameState.GameOver;
+		gameState = GameState.WaitingForStart;
+
+		// Show the difficulty selection planets after a short delay
+		StartCoroutine(ShowDifficultyPlanets());
 	}
 
 	public Difficulty GetDifficulty()
@@ -114,5 +131,22 @@ public class GameManager : MonoBehaviour
 	{
 		this.difficulty = difficulty;
 		StartGame(difficulty);
+	}
+
+	IEnumerator ShowDifficultyPlanets()
+	{
+		yield return new WaitForSeconds(10.0f);
+
+		foreach (GameObject planet in difficultyPlanets)
+		{
+			planet.SetActive(true);
+		}
+	}
+
+	IEnumerator StartFruitSpawning()
+	{
+		yield return new WaitForSeconds(2.0f);
+
+		spawnBox.StartCoroutine(spawnBox.SpawnFruits());
 	}
 }
