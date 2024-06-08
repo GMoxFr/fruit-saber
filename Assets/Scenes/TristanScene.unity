@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.0014785795, g: 0.0013591028, b: 0.0012890887, a: 1}
+  m_IndirectSpecularColor: {r: 0.0014835797, g: 0.0013570454, b: 0.0012931881, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -725,6 +725,7 @@ MonoBehaviour:
   fruitFail: {fileID: 8300000, guid: b4378d848d36cd3458a6c6e3812ba54f, type: 3}
   fruitSpawn: {fileID: 8300000, guid: 6c032e95a96ee8545801792ad17f8163, type: 3}
   music: {fileID: 8300000, guid: 1b9c171f417e99a43b8978dcd1e4d532, type: 3}
+  planetSlice: {fileID: 8300000, guid: 56f1a4270e5c2e241b578268041fba42, type: 3}
 --- !u!1 &304230039
 GameObject:
   m_ObjectHideFlags: 0

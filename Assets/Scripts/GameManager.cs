@@ -109,4 +109,10 @@ public class GameManager : MonoBehaviour
 	{
 		return difficulty;
 	}
+
+	public void SetDifficulty(Difficulty difficulty)
+	{
+		this.difficulty = difficulty;
+		StartGame(difficulty);
+	}
 }

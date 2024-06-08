@@ -12,6 +12,7 @@ public class AudioManager : MonoBehaviour
 	public AudioClip fruitFail;
 	public AudioClip fruitSpawn;
 	public AudioClip music;
+	public AudioClip planetSlice; 
 
 	void Awake()
 	{
@@ -65,4 +66,9 @@ public class AudioManager : MonoBehaviour
 		audioSource.clip = fruitSpawn;
 		audioSource.Play();
 	}
+
+	public void PlayPlanetSlice(Vector3 position)
+    {
+        AudioSource.PlayClipAtPoint(planetSlice, position);
+    }
 }
